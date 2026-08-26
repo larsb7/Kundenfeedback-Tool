@@ -82,9 +82,9 @@ Settings → Functions → D1 database bindings.
 
 - **Kein Verweis auf "Swiss Life"** in der Datenschutzerklärung: Swiss Life untersagt laut eigenen
   Nutzungsbedingungen jede Verwendung ihres Namens ohne vorherige schriftliche Zustimmung. Als
-  Verantwortlicher wird daher nur Lars Beeler persönlich genannt (Name, Geschäftsadresse,
-  E-Mail). Falls eine solche Zustimmung von Swiss Life vorliegt oder eingeholt wird, kann der
-  Name in `datenschutz.html` wieder ergänzt werden.
+  Verantwortlicher wird daher nur Lars Beeler persönlich genannt (Name, private Adresse
+  Tribschenstrasse 48, 6005 Luzern, E-Mail). Falls eine solche Zustimmung von Swiss Life vorliegt
+  oder eingeholt wird, kann der Name in `datenschutz.html` wieder ergänzt werden.
 - **Betroffenenrechte ergänzt:** Auskunft (Art. 25 DSG), Berichtigung/Löschung (Art. 32 DSG),
   Widerspruchsrecht, mit direktem Kontaktweg.
 - **Informationspflicht bei Weiterempfehlung präzisiert** (Art. 19 DSG, Daten nicht direkt von
