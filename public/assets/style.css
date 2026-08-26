@@ -1,5 +1,5 @@
 :root {
-  --accent: #0f6e56;
+  --accent: #7d2635;
   --accent-contrast: #ffffff;
   --bg: #faf5ec;
   --card-bg: #fffdf8;
@@ -15,8 +15,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --accent: #5dcaa5;
-    --accent-contrast: #06231a;
+    --accent: #d97a72;
+    --accent-contrast: #2a100d;
     --bg: #17130f;
     --card-bg: #211a13;
     --card-shadow: rgba(0, 0, 0, 0.35);
