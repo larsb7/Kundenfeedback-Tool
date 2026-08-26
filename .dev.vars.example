@@ -1,0 +1,2 @@
+ADMIN_PASSWORD=bitte-aendern
+SESSION_SECRET=ein-langer-zufaelliger-string

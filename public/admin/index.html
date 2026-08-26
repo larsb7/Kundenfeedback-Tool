@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin – Kundenfeedback</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <div class="brand">
+    <div class="brand-name">Lars Beeler</div>
+    <div class="brand-role">Admin-Bereich Kundenfeedback</div>
+  </div>
+
+  <!-- Login -->
+  <div class="card login-card" id="loginCard">
+    <h1>Anmelden</h1>
+    <div id="loginError" class="form-error" style="display: none"></div>
+    <div class="field">
+      <label for="passwordInput">Passwort</label>
+      <input type="password" id="passwordInput" />
+    </div>
+    <div class="actions">
+      <span></span>
+      <button type="button" class="primary" id="loginBtn">Anmelden</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="admin-wrap" id="dashboard" style="display: none">
+    <div class="admin-header">
+      <h1 style="margin: 0">Übersicht</h1>
+      <button type="button" class="secondary" id="logoutBtn">Abmelden</button>
+    </div>
+
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="overview">Übersicht</button>
+      <button type="button" class="tab-btn" data-tab="responses">Antworten</button>
+      <button type="button" class="tab-btn" data-tab="referrals">Weiterempfehlungen</button>
+    </div>
+
+    <div class="filter-row">
+      <div class="field">
+        <label for="filterFrom">Von</label>
+        <input type="date" id="filterFrom" />
+      </div>
+      <div class="field">
+        <label for="filterTo">Bis</label>
+        <input type="date" id="filterTo" />
+      </div>
+      <div class="field" id="filterEmpfehlungWrap">
+        <label for="filterEmpfehlung">Weiterempfehlung</label>
+        <select id="filterEmpfehlung">
+          <option value="">Alle</option>
+          <option value="ja">Ja</option>
+          <option value="nein">Nein</option>
+        </select>
+      </div>
+      <div class="field" id="filterContactedWrap" style="display: none">
+        <label for="filterContacted">Status</label>
+        <select id="filterContacted">
+          <option value="">Alle</option>
+          <option value="0">Nicht kontaktiert</option>
+          <option value="1">Kontaktiert</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button type="button" class="secondary" id="applyFiltersBtn">Filtern</button>
+      </div>
+      <div class="field">
+        <label>&nbsp;</label>
+        <button type="button" class="link-btn" id="resetFiltersBtn">Zurücksetzen</button>
+      </div>
+    </div>
+
+    <!-- Übersicht -->
+    <div class="tab-panel active" data-panel="overview">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="statTotal">–</div>
+          <div class="stat-label">Antworten gesamt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statAvgQ1">–</div>
+          <div class="stat-label">Ø Zufriedenheit</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statAvgQ2">–</div>
+          <div class="stat-label">Ø Fachkompetenz</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statEmpfehlungJa">–</div>
+          <div class="stat-label">Weiterempfehlungen (Ja)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statOffen">–</div>
+          <div class="stat-label">Noch nicht kontaktiert</div>
+        </div>
+      </div>
+
+      <h2 style="font-size: 1rem">Verlauf über Zeit</h2>
+      <div id="verlaufContainer"></div>
+    </div>
+
+    <!-- Antworten -->
+    <div class="tab-panel" data-panel="responses">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Zufriedenheit</th>
+              <th>Fachkompetenz</th>
+              <th>Kommentar</th>
+              <th>Weiterempfehlung</th>
+            </tr>
+          </thead>
+          <tbody id="responsesBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="responsesEmpty" style="display: none">Keine Antworten gefunden.</div>
+    </div>
+
+    <!-- Weiterempfehlungen -->
+    <div class="tab-panel" data-panel="referrals">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Name</th>
+              <th>Handynummer</th>
+              <th>E-Mail</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="referralsBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="referralsEmpty" style="display: none">Keine Weiterempfehlungen gefunden.</div>
+    </div>
+  </div>
+
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

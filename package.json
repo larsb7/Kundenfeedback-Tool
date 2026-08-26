@@ -1,0 +1,15 @@
+{
+  "name": "kundenfeedback-tool",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Kundenfeedback- und Weiterempfehlungs-Tool auf Cloudflare Pages, Pages Functions und D1.",
+  "scripts": {
+    "dev": "wrangler pages dev public --local",
+    "db:migrate:local": "wrangler d1 migrations apply kundenfeedback-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply kundenfeedback-db --remote",
+    "deploy": "wrangler pages deploy public"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
