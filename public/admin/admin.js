@@ -178,6 +178,7 @@
       .map(
         (r) => `<tr>
           <td>${formatDate(r.created_at)}</td>
+          <td>${escapeHtml(r.kunde_name)}</td>
           <td>${r.q1_zufriedenheit}/5</td>
           <td>${r.q2_fachkompetenz}/5</td>
           <td>${escapeHtml(r.q3_kommentar)}</td>

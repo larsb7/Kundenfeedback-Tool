@@ -20,11 +20,15 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: "Ungültige Anfrage." }, { status: 400 });
   }
 
+  const kundeName = body.kunde_name;
   const q1 = body.q1_zufriedenheit;
   const q2 = body.q2_fachkompetenz;
   const q3 = body.q3_kommentar;
   const q4 = body.q4_empfehlung;
 
+  if (!nonEmptyString(kundeName, 200)) {
+    return jsonResponse({ error: "Bitte Ihren Namen angeben." }, { status: 400 });
+  }
   if (!isRating(q1)) {
     return jsonResponse({ error: "Frage 1: Bitte eine Bewertung von 0 bis 5 angeben." }, { status: 400 });
   }
@@ -67,10 +71,10 @@ export async function onRequestPost(context) {
   const now = new Date().toISOString();
 
   const responseResult = await env.DB.prepare(
-    `INSERT INTO responses (created_at, q1_zufriedenheit, q2_fachkompetenz, q3_kommentar, q4_empfehlung)
-     VALUES (?, ?, ?, ?, ?)`
+    `INSERT INTO responses (created_at, kunde_name, q1_zufriedenheit, q2_fachkompetenz, q3_kommentar, q4_empfehlung)
+     VALUES (?, ?, ?, ?, ?, ?)`
   )
-    .bind(now, q1, q2, q3.trim(), q4)
+    .bind(now, kundeName.trim(), q1, q2, q3.trim(), q4)
     .run();
 
   const responseId = responseResult.meta.last_row_id;

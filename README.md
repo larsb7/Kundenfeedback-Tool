@@ -78,6 +78,27 @@ Settings → Functions → D1 database bindings.
 - **Admin-Login:** einfaches Passwort (Cloudflare Secret `ADMIN_PASSWORD`) mit
   signiertem Session-Cookie, kein Cloudflare Access.
 
+## Rechtliche Anpassungen (nach Rücksprache)
+
+- **Kein Verweis auf "Swiss Life"** in der Datenschutzerklärung: Swiss Life untersagt laut eigenen
+  Nutzungsbedingungen jede Verwendung ihres Namens ohne vorherige schriftliche Zustimmung. Als
+  Verantwortlicher wird daher nur Lars Beeler persönlich genannt (Name, Geschäftsadresse,
+  E-Mail). Falls eine solche Zustimmung von Swiss Life vorliegt oder eingeholt wird, kann der
+  Name in `datenschutz.html` wieder ergänzt werden.
+- **Betroffenenrechte ergänzt:** Auskunft (Art. 25 DSG), Berichtigung/Löschung (Art. 32 DSG),
+  Widerspruchsrecht, mit direktem Kontaktweg.
+- **Informationspflicht bei Weiterempfehlung präzisiert** (Art. 19 DSG, Daten nicht direkt von
+  der betroffenen Person erhoben).
+- **Hinweis zu Werbeanrufen:** Beim Erstkontakt mit einer empfohlenen Person gilt das UWG
+  (u. a. Sternchen-Eintrag im Telefonbuch, Art. 3 Abs. 1 lit. u UWG). Vor dem Anruf empfiehlt es
+  sich, die Nummer auf local.ch/search.ch auf einen Sternchen-Vermerk zu prüfen – ein solcher
+  Vermerk untersagt Werbeanrufe ohne bestehende Geschäftsbeziehung.
+- **Hinweis zu Art. 45 VAG:** Diese Umfrage ersetzt nicht die separate gesetzliche
+  Informationspflicht als Versicherungsvermittler (gebunden/ungebunden, Register, Haftung,
+  Entschädigung) beim tatsächlichen Beratungsgespräch mit einer empfohlenen Person.
+- Diese Anpassungen wurden mit aktueller Rechtslage (Stand August 2026) plausibilisiert, ersetzen
+  aber keine rechtliche Beratung im Einzelfall.
+
 ## Admin-Bereich
 
 Erreichbar unter `/admin/`. Nach Login (Passwort aus `ADMIN_PASSWORD`) stehen drei

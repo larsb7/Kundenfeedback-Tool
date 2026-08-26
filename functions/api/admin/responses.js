@@ -24,7 +24,7 @@ export async function onRequestGet(context) {
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
 
   const result = await env.DB.prepare(
-    `SELECT id, created_at, q1_zufriedenheit, q2_fachkompetenz, q3_kommentar, q4_empfehlung
+    `SELECT id, created_at, kunde_name, q1_zufriedenheit, q2_fachkompetenz, q3_kommentar, q4_empfehlung
      FROM responses ${where}
      ORDER BY created_at DESC
      LIMIT 500`

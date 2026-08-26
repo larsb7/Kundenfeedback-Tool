@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS responses (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+  kunde_name TEXT NOT NULL,
   q1_zufriedenheit INTEGER NOT NULL CHECK (q1_zufriedenheit BETWEEN 0 AND 5),
   q2_fachkompetenz INTEGER NOT NULL CHECK (q2_fachkompetenz BETWEEN 0 AND 5),
   q3_kommentar TEXT NOT NULL,

@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kundenfeedback – Lars Beeler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/style.css" />
 </head>
 <body>
@@ -19,19 +22,34 @@
   <div class="card">
     <div id="formError" class="form-error" style="display: none"></div>
 
-    <!-- Schritt 1: Zufriedenheit -->
+    <!-- Schritt 1: Name -->
     <section class="step active" data-step="1">
-      <h1>Wie zufrieden waren Sie insgesamt mit der Beratung?</h1>
-      <div class="rating-group" data-field="q1" role="group" aria-label="Bewertung 0 bis 5"></div>
-      <div class="rating-scale-labels"><span>gar nicht zufrieden</span><span>sehr zufrieden</span></div>
+      <h1>Wie dürfen wir Sie nennen?</h1>
+      <p>Damit Lars weiss, von wem das Feedback stammt.</p>
+      <div class="field">
+        <label for="kundeName">Ihr Name</label>
+        <input type="text" id="kundeName" maxlength="200" placeholder="Vor- und Nachname" />
+        <div class="error-text" id="kundeNameError"></div>
+      </div>
       <div class="actions">
         <span></span>
         <button type="button" class="primary" data-next disabled>Weiter</button>
       </div>
     </section>
 
-    <!-- Schritt 2: Fachkompetenz -->
+    <!-- Schritt 2: Zufriedenheit -->
     <section class="step" data-step="2">
+      <h1>Wie zufrieden waren Sie insgesamt mit der Beratung?</h1>
+      <div class="rating-group" data-field="q1" role="group" aria-label="Bewertung 0 bis 5"></div>
+      <div class="rating-scale-labels"><span>gar nicht zufrieden</span><span>sehr zufrieden</span></div>
+      <div class="actions">
+        <button type="button" class="secondary" data-back>Zurück</button>
+        <button type="button" class="primary" data-next disabled>Weiter</button>
+      </div>
+    </section>
+
+    <!-- Schritt 3: Fachkompetenz -->
+    <section class="step" data-step="3">
       <h1>Wie bewerten Sie die Fachkompetenz von Herrn Beeler?</h1>
       <div class="rating-group" data-field="q2" role="group" aria-label="Bewertung 0 bis 5"></div>
       <div class="rating-scale-labels"><span>gar nicht kompetent</span><span>sehr kompetent</span></div>
@@ -41,8 +59,8 @@
       </div>
     </section>
 
-    <!-- Schritt 3: Freitext -->
-    <section class="step" data-step="3">
+    <!-- Schritt 4: Freitext -->
+    <section class="step" data-step="4">
       <h1>Was hat Ihnen an der Beratung von Herrn Beeler besonders gefallen?</h1>
       <div class="field">
         <textarea id="q3" maxlength="2000" placeholder="Ihre Antwort..."></textarea>
@@ -54,8 +72,8 @@
       </div>
     </section>
 
-    <!-- Schritt 4: Weiterempfehlung ja/nein -->
-    <section class="step" data-step="4">
+    <!-- Schritt 5: Weiterempfehlung ja/nein -->
+    <section class="step" data-step="5">
       <h1>Würden Sie Herrn Beeler weiterempfehlen?</h1>
       <div class="yesno-group">
         <button type="button" class="yesno-option" data-q4="ja">Ja</button>
@@ -67,8 +85,8 @@
       </div>
     </section>
 
-    <!-- Schritt 5: Kontaktformular (nur bei "Ja") -->
-    <section class="step" data-step="5">
+    <!-- Schritt 6: Kontaktformular (nur bei "Ja") -->
+    <section class="step" data-step="6">
       <h1>Weiterempfehlung</h1>
       <p>Eine Weiterempfehlung ist für mich immer das schönste Kompliment. Falls Sie also jemanden kennen, der ebenfalls von einer Beratung profitieren würde, können Sie gerne die Kontaktdaten dieser Person unten eingeben.</p>
 

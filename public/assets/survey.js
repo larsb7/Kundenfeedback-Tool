@@ -2,6 +2,7 @@
   "use strict";
 
   const state = {
+    kundeName: "",
     q1: null,
     q2: null,
     q3: "",
@@ -18,7 +19,7 @@
   const formError = document.getElementById("formError");
 
   function totalSteps() {
-    return state.q4 === "nein" ? 4 : 5;
+    return state.q4 === "nein" ? 5 : 6;
   }
 
   function stepNumber(step) {
@@ -74,14 +75,23 @@
     if (!nextBtn) return;
     const step = stepEl.dataset.step;
     let valid = false;
-    if (step === "1") valid = state.q1 !== null;
-    if (step === "2") valid = state.q2 !== null;
-    if (step === "3") valid = state.q3.trim().length > 0;
-    if (step === "4") valid = state.q4 !== null;
+    if (step === "1") valid = state.kundeName.trim().length > 0;
+    if (step === "2") valid = state.q1 !== null;
+    if (step === "3") valid = state.q2 !== null;
+    if (step === "4") valid = state.q3.trim().length > 0;
+    if (step === "5") valid = state.q4 !== null;
     nextBtn.disabled = !valid;
   }
 
-  // Schritt 3: Freitext
+  // Schritt 1: Name
+  const kundeNameInput = document.getElementById("kundeName");
+  kundeNameInput.addEventListener("input", () => {
+    state.kundeName = kundeNameInput.value;
+    document.getElementById("kundeNameError").textContent = "";
+    updateNextButton(kundeNameInput.closest(".step"));
+  });
+
+  // Schritt 4: Freitext
   const q3Input = document.getElementById("q3");
   q3Input.addEventListener("input", () => {
     state.q3 = q3Input.value;
@@ -89,7 +99,7 @@
     updateNextButton(q3Input.closest(".step"));
   });
 
-  // Schritt 4: Ja/Nein
+  // Schritt 5: Ja/Nein
   document.querySelectorAll("[data-q4]").forEach((btn) => {
     btn.addEventListener("click", () => {
       state.q4 = btn.dataset.q4;
@@ -103,18 +113,25 @@
   document.querySelectorAll("[data-next]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const step = btn.closest(".step").dataset.step;
-      if (step === "1") return showStep("2");
+      if (step === "1") {
+        if (state.kundeName.trim().length === 0) {
+          document.getElementById("kundeNameError").textContent = "Bitte Ihren Namen angeben.";
+          return;
+        }
+        return showStep("2");
+      }
       if (step === "2") return showStep("3");
-      if (step === "3") {
+      if (step === "3") return showStep("4");
+      if (step === "4") {
         if (state.q3.trim().length === 0) {
           document.getElementById("q3Error").textContent = "Bitte einen Kommentar eingeben.";
           return;
         }
-        return showStep("4");
-      }
-      if (step === "4") {
-        if (state.q4 === "nein") return submitFeedback();
         return showStep("5");
+      }
+      if (step === "5") {
+        if (state.q4 === "nein") return submitFeedback();
+        return showStep("6");
       }
     });
   });
@@ -127,17 +144,18 @@
       if (step === "3") return showStep("2");
       if (step === "4") return showStep("3");
       if (step === "5") return showStep("4");
+      if (step === "6") return showStep("5");
     });
   });
 
-  // Schritt 5: Kontaktformular
+  // Schritt 6: Kontaktformular
   const vornameInput = document.getElementById("vorname");
   const nachnameInput = document.getElementById("nachname");
   const handynummerInput = document.getElementById("handynummer");
   const emailInput = document.getElementById("email");
   const consentInput = document.getElementById("consent");
 
-  function validateStep5() {
+  function validateStep6() {
     let ok = true;
     document.getElementById("vornameError").textContent = "";
     document.getElementById("nachnameError").textContent = "";
@@ -164,7 +182,7 @@
   }
 
   document.getElementById("submitBtn").addEventListener("click", () => {
-    if (!validateStep5()) return;
+    if (!validateStep6()) return;
     state.vorname = vornameInput.value.trim();
     state.nachname = nachnameInput.value.trim();
     state.handynummer = handynummerInput.value.trim();
@@ -176,6 +194,7 @@
   async function submitFeedback() {
     hideFormError();
     const payload = {
+      kunde_name: state.kundeName.trim(),
       q1_zufriedenheit: state.q1,
       q2_fachkompetenz: state.q2,
       q3_kommentar: state.q3.trim(),
