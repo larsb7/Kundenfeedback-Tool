@@ -5,6 +5,13 @@
   const dashboard = document.getElementById("dashboard");
   const loginError = document.getElementById("loginError");
 
+  const STATUS_LABELS = {
+    neu: "Neu",
+    kontaktiert: "Kontaktiert",
+    termin_vereinbart: "Termin vereinbart",
+    abgeschlossen: "Abgeschlossen",
+  };
+
   function isoStartOfDay(dateStr) {
     return dateStr ? `${dateStr}T00:00:00.000Z` : null;
   }
@@ -89,8 +96,7 @@
       activeTab = btn.dataset.tab;
       document.querySelectorAll(".tab-btn").forEach((b) => b.classList.toggle("active", b === btn));
       document.querySelectorAll(".tab-panel").forEach((p) => p.classList.toggle("active", p.dataset.panel === activeTab));
-      document.getElementById("filterEmpfehlungWrap").style.display = activeTab === "responses" ? "block" : "none";
-      document.getElementById("filterContactedWrap").style.display = activeTab === "referrals" ? "block" : "none";
+      document.getElementById("filterStatusWrap").style.display = activeTab === "leads" ? "block" : "none";
       loadActiveTab();
     });
   });
@@ -99,8 +105,7 @@
   document.getElementById("resetFiltersBtn").addEventListener("click", () => {
     document.getElementById("filterFrom").value = "";
     document.getElementById("filterTo").value = "";
-    document.getElementById("filterEmpfehlung").value = "";
-    document.getElementById("filterContacted").value = "";
+    document.getElementById("filterStatus").value = "";
     loadActiveTab();
   });
 
@@ -108,15 +113,13 @@
     return {
       from: isoStartOfDay(document.getElementById("filterFrom").value),
       to: isoEndOfDay(document.getElementById("filterTo").value),
-      empfehlung: document.getElementById("filterEmpfehlung").value,
-      contacted: document.getElementById("filterContacted").value,
+      status: document.getElementById("filterStatus").value,
     };
   }
 
   function loadActiveTab() {
     if (activeTab === "overview") return loadOverview();
-    if (activeTab === "responses") return loadResponses();
-    if (activeTab === "referrals") return loadReferrals();
+    if (activeTab === "leads") return loadLeads();
   }
 
   // --- Übersicht ---
@@ -131,10 +134,10 @@
     if (!data) return;
 
     document.getElementById("statTotal").textContent = data.total;
-    document.getElementById("statAvgQ1").textContent = data.avg_q1 ?? "–";
-    document.getElementById("statAvgQ2").textContent = data.avg_q2 ?? "–";
-    document.getElementById("statEmpfehlungJa").textContent = data.empfehlungen_ja;
-    document.getElementById("statOffen").textContent = data.offene_weiterempfehlungen;
+    document.getElementById("statNeu").textContent = data.neu;
+    document.getElementById("statKontaktiert").textContent = data.kontaktiert;
+    document.getElementById("statTermin").textContent = data.termin_vereinbart;
+    document.getElementById("statAbgeschlossen").textContent = data.abgeschlossen;
 
     const container = document.getElementById("verlaufContainer");
     if (!data.verlauf || data.verlauf.length === 0) {
@@ -154,86 +157,60 @@
       .join("");
   }
 
-  // --- Antworten ---
+  // --- Terminanfragen ---
 
-  async function loadResponses() {
-    const { from, to, empfehlung } = currentFilters();
+  async function loadLeads() {
+    const { from, to, status } = currentFilters();
     const params = new URLSearchParams();
     if (from) params.set("from", from);
     if (to) params.set("to", to);
-    if (empfehlung) params.set("empfehlung", empfehlung);
+    if (status) params.set("status", status);
 
-    const data = await api(`/api/admin/responses?${params.toString()}`).catch(() => null);
+    const data = await api(`/api/admin/leads?${params.toString()}`).catch(() => null);
     if (!data) return;
 
-    const tbody = document.getElementById("responsesBody");
-    const empty = document.getElementById("responsesEmpty");
-    if (!data.responses || data.responses.length === 0) {
+    const tbody = document.getElementById("leadsBody");
+    const empty = document.getElementById("leadsEmpty");
+    if (!data.leads || data.leads.length === 0) {
       tbody.innerHTML = "";
       empty.style.display = "block";
       return;
     }
     empty.style.display = "none";
-    tbody.innerHTML = data.responses
-      .map(
-        (r) => `<tr>
-          <td>${formatDate(r.created_at)}</td>
-          <td>${escapeHtml(r.kunde_name)}</td>
-          <td>${r.q1_zufriedenheit}/5</td>
-          <td>${r.q2_fachkompetenz}/5</td>
-          <td>${escapeHtml(r.q3_kommentar)}</td>
-          <td>${r.q4_empfehlung === "ja" ? "Ja" : "Nein"}</td>
-        </tr>`
-      )
-      .join("");
-  }
-
-  // --- Weiterempfehlungen ---
-
-  async function loadReferrals() {
-    const { from, to, contacted } = currentFilters();
-    const params = new URLSearchParams();
-    if (from) params.set("from", from);
-    if (to) params.set("to", to);
-    if (contacted) params.set("contacted", contacted);
-
-    const data = await api(`/api/admin/referrals?${params.toString()}`).catch(() => null);
-    if (!data) return;
-
-    const tbody = document.getElementById("referralsBody");
-    const empty = document.getElementById("referralsEmpty");
-    if (!data.referrals || data.referrals.length === 0) {
-      tbody.innerHTML = "";
-      empty.style.display = "block";
-      return;
-    }
-    empty.style.display = "none";
-    tbody.innerHTML = data.referrals
-      .map((r) => {
-        const statusClass = r.contacted ? "kontaktiert" : "nicht-kontaktiert";
-        const statusLabel = r.contacted ? "Kontaktiert" : "Nicht kontaktiert";
+    tbody.innerHTML = data.leads
+      .map((lead) => {
+        const statusOptions = Object.entries(STATUS_LABELS)
+          .map(([value, label]) => `<option value="${value}" ${value === lead.status ? "selected" : ""}>${label}</option>`)
+          .join("");
         return `<tr>
-          <td>${formatDate(r.created_at)}</td>
-          <td>${escapeHtml(r.vorname)} ${escapeHtml(r.nachname)}</td>
-          <td>${escapeHtml(r.handynummer)}</td>
-          <td>${r.email ? escapeHtml(r.email) : "–"}</td>
-          <td><button type="button" class="status-badge ${statusClass}" data-id="${r.id}" data-contacted="${r.contacted}">${statusLabel}</button></td>
+          <td>${formatDate(lead.created_at)}</td>
+          <td>${escapeHtml(lead.vorname)} ${escapeHtml(lead.nachname)}</td>
+          <td>${escapeHtml(lead.telefonnummer)}</td>
+          <td>${lead.email ? escapeHtml(lead.email) : "–"}</td>
+          <td>${escapeHtml(lead.thema)}</td>
+          <td>${lead.empfohlen_durch ? escapeHtml(lead.empfohlen_durch) : "–"}</td>
+          <td>
+            <select class="status-select status-${lead.status}" data-id="${lead.id}">
+              ${statusOptions}
+            </select>
+          </td>
         </tr>`;
       })
       .join("");
 
-    tbody.querySelectorAll(".status-badge").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const id = btn.dataset.id;
-        const newContacted = btn.dataset.contacted !== "1";
+    tbody.querySelectorAll(".status-select").forEach((select) => {
+      select.addEventListener("change", async () => {
+        const id = select.dataset.id;
+        const newStatus = select.value;
         try {
-          await api(`/api/admin/referrals/${id}`, {
+          await api(`/api/admin/leads/${id}`, {
             method: "PATCH",
-            body: JSON.stringify({ contacted: newContacted }),
+            body: JSON.stringify({ status: newStatus }),
           });
-          loadReferrals();
+          select.className = `status-select status-${newStatus}`;
         } catch (err) {
           alert(err.message);
+          loadLeads();
         }
       });
     });

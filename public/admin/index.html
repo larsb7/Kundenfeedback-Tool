@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin – Kundenfeedback</title>
+  <title>Admin – Terminanfragen</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,7 +13,7 @@
 <body>
   <div class="brand">
     <div class="brand-name">Lars Beeler</div>
-    <div class="brand-role">Admin-Bereich Kundenfeedback</div>
+    <div class="brand-role">Admin-Bereich Terminanfragen</div>
   </div>
 
   <!-- Login -->
@@ -39,8 +39,7 @@
 
     <div class="tabs">
       <button type="button" class="tab-btn active" data-tab="overview">Übersicht</button>
-      <button type="button" class="tab-btn" data-tab="responses">Antworten</button>
-      <button type="button" class="tab-btn" data-tab="referrals">Weiterempfehlungen</button>
+      <button type="button" class="tab-btn" data-tab="leads">Terminanfragen</button>
     </div>
 
     <div class="filter-row">
@@ -52,20 +51,14 @@
         <label for="filterTo">Bis</label>
         <input type="date" id="filterTo" />
       </div>
-      <div class="field" id="filterEmpfehlungWrap">
-        <label for="filterEmpfehlung">Weiterempfehlung</label>
-        <select id="filterEmpfehlung">
+      <div class="field" id="filterStatusWrap" style="display: none">
+        <label for="filterStatus">Status</label>
+        <select id="filterStatus">
           <option value="">Alle</option>
-          <option value="ja">Ja</option>
-          <option value="nein">Nein</option>
-        </select>
-      </div>
-      <div class="field" id="filterContactedWrap" style="display: none">
-        <label for="filterContacted">Status</label>
-        <select id="filterContacted">
-          <option value="">Alle</option>
-          <option value="0">Nicht kontaktiert</option>
-          <option value="1">Kontaktiert</option>
+          <option value="neu">Neu</option>
+          <option value="kontaktiert">Kontaktiert</option>
+          <option value="termin_vereinbart">Termin vereinbart</option>
+          <option value="abgeschlossen">Abgeschlossen</option>
         </select>
       </div>
       <div class="field">
@@ -83,23 +76,23 @@
       <div class="stat-grid">
         <div class="stat-card">
           <div class="stat-value" id="statTotal">–</div>
-          <div class="stat-label">Antworten gesamt</div>
+          <div class="stat-label">Anfragen gesamt</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="statAvgQ1">–</div>
-          <div class="stat-label">Ø Zufriedenheit</div>
+          <div class="stat-value" id="statNeu">–</div>
+          <div class="stat-label">Neu</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="statAvgQ2">–</div>
-          <div class="stat-label">Ø Fachkompetenz</div>
+          <div class="stat-value" id="statKontaktiert">–</div>
+          <div class="stat-label">Kontaktiert</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="statEmpfehlungJa">–</div>
-          <div class="stat-label">Weiterempfehlungen (Ja)</div>
+          <div class="stat-value" id="statTermin">–</div>
+          <div class="stat-label">Termin vereinbart</div>
         </div>
         <div class="stat-card">
-          <div class="stat-value" id="statOffen">–</div>
-          <div class="stat-label">Noch nicht kontaktiert</div>
+          <div class="stat-value" id="statAbgeschlossen">–</div>
+          <div class="stat-label">Abgeschlossen</div>
         </div>
       </div>
 
@@ -107,43 +100,25 @@
       <div id="verlaufContainer"></div>
     </div>
 
-    <!-- Antworten -->
-    <div class="tab-panel" data-panel="responses">
+    <!-- Terminanfragen -->
+    <div class="tab-panel" data-panel="leads">
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>Datum</th>
               <th>Name</th>
-              <th>Zufriedenheit</th>
-              <th>Fachkompetenz</th>
-              <th>Kommentar</th>
-              <th>Weiterempfehlung</th>
-            </tr>
-          </thead>
-          <tbody id="responsesBody"></tbody>
-        </table>
-      </div>
-      <div class="empty-state" id="responsesEmpty" style="display: none">Keine Antworten gefunden.</div>
-    </div>
-
-    <!-- Weiterempfehlungen -->
-    <div class="tab-panel" data-panel="referrals">
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Datum</th>
-              <th>Name</th>
-              <th>Handynummer</th>
+              <th>Telefon</th>
               <th>E-Mail</th>
+              <th>Thema</th>
+              <th>Empfohlen durch</th>
               <th>Status</th>
             </tr>
           </thead>
-          <tbody id="referralsBody"></tbody>
+          <tbody id="leadsBody"></tbody>
         </table>
       </div>
-      <div class="empty-state" id="referralsEmpty" style="display: none">Keine Weiterempfehlungen gefunden.</div>
+      <div class="empty-state" id="leadsEmpty" style="display: none">Keine Terminanfragen gefunden.</div>
     </div>
   </div>
 

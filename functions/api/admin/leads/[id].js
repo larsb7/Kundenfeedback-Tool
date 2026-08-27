@@ -1,5 +1,7 @@
 import { jsonResponse } from "../../../lib/auth.js";
 
+const VALID_STATUSES = ["neu", "kontaktiert", "termin_vereinbart", "abgeschlossen"];
+
 export async function onRequestPatch(context) {
   const { request, env, params } = context;
   const id = Number(params.id);
@@ -14,22 +16,17 @@ export async function onRequestPatch(context) {
     return jsonResponse({ error: "Ungültige Anfrage." }, { status: 400 });
   }
 
-  if (typeof body.contacted !== "boolean") {
-    return jsonResponse({ error: "Feld 'contacted' (boolean) fehlt." }, { status: 400 });
+  if (!VALID_STATUSES.includes(body.status)) {
+    return jsonResponse({ error: "Ungültiger Status." }, { status: 400 });
   }
 
-  const contacted = body.contacted ? 1 : 0;
-  const contactedAt = contacted ? new Date().toISOString() : null;
-
-  const result = await env.DB.prepare(
-    `UPDATE referrals SET contacted = ?, contacted_at = ? WHERE id = ?`
-  )
-    .bind(contacted, contactedAt, id)
+  const result = await env.DB.prepare(`UPDATE leads SET status = ? WHERE id = ?`)
+    .bind(body.status, id)
     .run();
 
   if (result.meta.changes === 0) {
     return jsonResponse({ error: "Nicht gefunden." }, { status: 404 });
   }
 
-  return jsonResponse({ ok: true, contacted: !!contacted, contacted_at: contactedAt });
+  return jsonResponse({ ok: true, status: body.status });
 }

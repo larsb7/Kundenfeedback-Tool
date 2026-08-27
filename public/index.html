@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kundenfeedback – Lars Beeler</title>
+  <title>Kostenlose Beratung – Lars Beeler</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -15,125 +15,74 @@
     <div class="brand-role">Ihr Vorsorge- und Finanzspezialist aus Luzern</div>
   </div>
 
-  <div class="progress-track" aria-hidden="true">
-    <div class="progress-fill" id="progressFill"></div>
+  <div class="card" id="screenHero">
+    <h1 class="claim">Finanzberatung kann auch einfach sein.</h1>
+    <p>Sie wurden von jemandem empfohlen, der Herrn Beelers Beratung schätzt. Vereinbaren Sie
+      unverbindlich und kostenlos ein Erstgespräch.</p>
+    <div class="actions" style="margin-top: 8px">
+      <button type="button" class="primary" id="startBtn">Jetzt kostenlosen Termin vereinbaren</button>
+    </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="screenForm" style="display: none">
     <div id="formError" class="form-error" style="display: none"></div>
+    <h1>Kostenlosen Termin anfragen</h1>
 
-    <!-- Schritt 1: Name -->
-    <section class="step active" data-step="1">
-      <h1>Wie ist Ihr Name?</h1>
-      <p>Damit Herr Beeler weiss, von wem dieses Feedback stammt.</p>
-      <div class="field">
-        <label for="kundeName">Ihr Name</label>
-        <input type="text" id="kundeName" maxlength="200" placeholder="Vor- und Nachname" />
-        <div class="error-text" id="kundeNameError"></div>
-      </div>
-      <div class="actions">
-        <span></span>
-        <button type="button" class="primary" data-next disabled>Weiter</button>
-      </div>
-    </section>
+    <div class="field">
+      <label for="vorname">Vorname</label>
+      <input type="text" id="vorname" maxlength="200" />
+      <div class="error-text" id="vornameError"></div>
+    </div>
+    <div class="field">
+      <label for="nachname">Nachname</label>
+      <input type="text" id="nachname" maxlength="200" />
+      <div class="error-text" id="nachnameError"></div>
+    </div>
+    <div class="field">
+      <label for="telefonnummer">Telefonnummer</label>
+      <input type="tel" id="telefonnummer" maxlength="50" placeholder="079 123 45 67" />
+      <div class="error-text" id="telefonnummerError"></div>
+    </div>
+    <div class="field">
+      <label for="email">E-Mail (optional)</label>
+      <input type="email" id="email" maxlength="300" />
+    </div>
+    <div class="field">
+      <label for="thema">Zu folgenden Themen möchte ich beraten werden</label>
+      <textarea id="thema" maxlength="2000" placeholder="z. B. Vorsorge, Versicherungen, Anlagen..."></textarea>
+      <div class="error-text" id="themaError"></div>
+    </div>
+    <div class="field">
+      <label for="empfohlenDurch">Durch folgende Person bin ich auf Herrn Beeler aufmerksam geworden (optional)</label>
+      <input type="text" id="empfohlenDurch" maxlength="300" />
+    </div>
 
-    <!-- Schritt 2: Zufriedenheit -->
-    <section class="step" data-step="2">
-      <h1>Wie zufrieden waren Sie insgesamt mit der Beratung?</h1>
-      <div class="rating-group" data-field="q1" role="group" aria-label="Bewertung 0 bis 5"></div>
-      <div class="rating-scale-labels"><span>gar nicht zufrieden</span><span>sehr zufrieden</span></div>
-      <div class="actions">
-        <button type="button" class="secondary" data-back>Zurück</button>
-        <button type="button" class="primary" data-next disabled>Weiter</button>
-      </div>
-    </section>
+    <div class="checkbox-field">
+      <input type="checkbox" id="consent" />
+      <label for="consent">Ich bestätige, dass Herr Lars Beeler mich zwecks Vereinbarung eines kostenlosen Erstgesprächs kontaktieren darf.</label>
+    </div>
+    <div class="error-text" id="consentError"></div>
 
-    <!-- Schritt 3: Fachkompetenz -->
-    <section class="step" data-step="3">
-      <h1>Wie bewerten Sie die Fachkompetenz von Herrn Beeler?</h1>
-      <div class="rating-group" data-field="q2" role="group" aria-label="Bewertung 0 bis 5"></div>
-      <div class="rating-scale-labels"><span>gar nicht kompetent</span><span>sehr kompetent</span></div>
-      <div class="actions">
-        <button type="button" class="secondary" data-back>Zurück</button>
-        <button type="button" class="primary" data-next disabled>Weiter</button>
-      </div>
-    </section>
+    <div class="actions">
+      <span></span>
+      <button type="button" class="primary" id="submitBtn">Absenden</button>
+    </div>
 
-    <!-- Schritt 4: Freitext -->
-    <section class="step" data-step="4">
-      <h1>Was hat Ihnen an der Beratung von Herrn Beeler besonders gefallen?</h1>
-      <div class="field">
-        <textarea id="q3" maxlength="2000" placeholder="Ihre Antwort..."></textarea>
-        <div class="error-text" id="q3Error"></div>
-      </div>
-      <div class="actions">
-        <button type="button" class="secondary" data-back>Zurück</button>
-        <button type="button" class="primary" data-next disabled>Weiter</button>
-      </div>
-    </section>
+    <p class="hint-text" style="margin-top: 16px">
+      Weitere Informationen zum Umgang mit Ihren Daten finden Sie in der
+      <a href="/datenschutz.html">Datenschutzerklärung</a>.
+    </p>
+  </div>
 
-    <!-- Schritt 5: Weiterempfehlung ja/nein -->
-    <section class="step" data-step="5">
-      <h1>Würden Sie Herrn Beeler weiterempfehlen?</h1>
-      <div class="yesno-group">
-        <button type="button" class="yesno-option" data-q4="ja">Ja</button>
-        <button type="button" class="yesno-option" data-q4="nein">Nein</button>
-      </div>
-      <div class="actions">
-        <button type="button" class="secondary" data-back>Zurück</button>
-        <button type="button" class="primary" data-next disabled>Weiter</button>
-      </div>
-    </section>
-
-    <!-- Schritt 6: Kontaktformular (nur bei "Ja") -->
-    <section class="step" data-step="6">
-      <h1>Weiterempfehlung</h1>
-      <p>Eine Weiterempfehlung ist für mich immer das schönste Kompliment. Falls Sie also jemanden kennen, der ebenfalls von einer Beratung profitieren würde, können Sie gerne die Kontaktdaten dieser Person unten eingeben.</p>
-
-      <div class="field">
-        <label for="vorname">Vorname</label>
-        <input type="text" id="vorname" maxlength="200" />
-        <div class="error-text" id="vornameError"></div>
-      </div>
-      <div class="field">
-        <label for="nachname">Nachname</label>
-        <input type="text" id="nachname" maxlength="200" />
-        <div class="error-text" id="nachnameError"></div>
-      </div>
-      <div class="field">
-        <label for="handynummer">Handynummer</label>
-        <input type="tel" id="handynummer" maxlength="50" placeholder="079 123 45 67" />
-        <div class="error-text" id="handynummerError"></div>
-      </div>
-      <div class="field">
-        <label for="email">E-Mail (optional)</label>
-        <input type="email" id="email" maxlength="300" />
-      </div>
-
-      <div class="checkbox-field">
-        <input type="checkbox" id="consent" />
-        <label for="consent">Ich bin einverstanden, dass Herr Beeler sich bei der angegebenen Person melden darf.</label>
-      </div>
-      <div class="error-text" id="consentError"></div>
-      <p class="hint-text">Die Angaben werden ausschliesslich für eine unverbindliche Erstberatung verwendet und nicht an Dritte weitergegeben.</p>
-
-      <div class="actions">
-        <button type="button" class="secondary" data-back>Zurück</button>
-        <button type="button" class="primary" id="submitBtn">Absenden</button>
-      </div>
-    </section>
-
-    <!-- Abschluss -->
-    <section class="step thank-you" data-step="done">
-      <h2>Vielen Dank für Ihre Teilnahme.</h2>
-      <p>Ich schätze das sehr.</p>
-    </section>
+  <div class="card thank-you" id="screenDone" style="display: none">
+    <h2>Vielen Dank.</h2>
+    <p>Herr Beeler wird sich schnellstmöglich bei Ihnen melden.</p>
   </div>
 
   <footer>
     <a href="/datenschutz.html">Datenschutzerklärung</a>
   </footer>
 
-  <script src="/assets/survey.js"></script>
+  <script src="/assets/landing.js"></script>
 </body>
 </html>

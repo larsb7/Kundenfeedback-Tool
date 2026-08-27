@@ -1,8 +1,10 @@
 # Kundenfeedback-Tool
 
-Kundenfeedback- und Weiterempfehlungs-Tool für Lars Beeler, Vorsorge- und
-Finanzspezialist aus Luzern. Details zum Konzept siehe
-[`projektbrief-kundenfeedback-tool.md`](./projektbrief-kundenfeedback-tool.md).
+Empfehlungs-Landingpage für Lars Beeler, Vorsorge- und Finanzspezialist aus Luzern.
+Von Kunden weiterempfohlene Personen gelangen per QR-Code auf diese Seite und können
+dort direkt ein kostenloses Erstgespräch anfragen. Ursprüngliches Konzept (Zufriedenheits-
+Umfrage) siehe [`projektbrief-kundenfeedback-tool.md`](./projektbrief-kundenfeedback-tool.md)
+– das Projekt wurde seither zu einer reinen Terminanfrage-Landingpage umgebaut.
 
 ## Stack
 
@@ -13,22 +15,21 @@ Finanzspezialist aus Luzern. Details zum Konzept siehe
 ## Projektstruktur
 
 ```
-public/                  Kundenseite (Umfrage), Datenschutzseite, Admin-Bereich
-  index.html              5-teilige Umfrage
+public/                  Landingpage, Datenschutzseite, Admin-Bereich
+  index.html              Hero + Terminanfrage-Formular + Dankesseite
   datenschutz.html         Datenschutzerklärung
   admin/                   Passwortgeschützter Admin-Bereich (SPA)
 functions/
-  api/responses.js         POST /api/responses – Umfrage-Absenden
+  api/leads.js              POST /api/leads – Terminanfrage absenden
   api/admin/login.js        POST /api/admin/login
   api/admin/logout.js       POST /api/admin/logout
   api/admin/session.js      GET  /api/admin/session – Session-Check
-  api/admin/summary.js      GET  /api/admin/summary – Kennzahlen & Verlauf
-  api/admin/responses.js    GET  /api/admin/responses – Antworten-Liste
-  api/admin/referrals.js    GET  /api/admin/referrals – Weiterempfehlungen-Liste
-  api/admin/referrals/[id].js  PATCH – Status kontaktiert/nicht kontaktiert
+  api/admin/summary.js      GET  /api/admin/summary – Kennzahlen (Status-Verteilung) & Verlauf
+  api/admin/leads.js        GET  /api/admin/leads – Leads-Liste, filterbar nach Zeitraum/Status
+  api/admin/leads/[id].js    PATCH – Status ändern (neu/kontaktiert/termin_vereinbart/abgeschlossen)
   api/admin/_middleware.js  Session-Prüfung für alle /api/admin/* Routen
   lib/auth.js               Signierte Session-Cookies (HMAC-SHA256, ohne Fremd-Login-Dienst)
-migrations/0001_init.sql    D1-Schema (responses, referrals)
+migrations/0001_init.sql    D1-Schema (Tabelle leads)
 wrangler.toml
 ```
 
@@ -46,15 +47,20 @@ npm run dev                       # startet wrangler pages dev auf http://localh
 `.dev.vars` wird von `wrangler pages dev` automatisch als lokale Umgebungsvariablen
 (Secrets) eingelesen und ist über `.gitignore` vom Repo ausgeschlossen.
 
-- Umfrage: `http://localhost:8788/`
+- Landingpage: `http://localhost:8788/`
 - Admin-Bereich: `http://localhost:8788/admin/` (Passwort aus `.dev.vars`)
 
 ## Deployment auf Cloudflare (noch nicht ausgeführt)
 
 1. `npx wrangler login`
 2. `npx wrangler pages project create kundenfeedback-tool`
-3. `npx wrangler d1 create kundenfeedback-db` → die zurückgegebene `database_id` in
-   `wrangler.toml` unter `[[d1_databases]]` eintragen (ersetzt `REPLACE_WITH_D1_DATABASE_ID`)
+3. **D1-Datenbank mit EU-Jurisdiktion anlegen** (nur bei Neuanlage möglich, nicht nachträglich
+   änderbar):
+   ```bash
+   npx wrangler d1 create kundenfeedback-db --jurisdiction eu
+   ```
+   Die zurückgegebene `database_id` in `wrangler.toml` unter `[[d1_databases]]` eintragen
+   (ersetzt `REPLACE_WITH_D1_DATABASE_ID`).
 4. `npm run db:migrate:remote` – Schema auf die produktive D1-Datenbank anwenden
 5. Secrets für die Pages-Umgebung setzen (Production und ggf. Preview):
    ```bash
@@ -69,44 +75,38 @@ D1-Binding `DB` (Name wie in `wrangler.toml`) verknüpft werden – entweder aut
 `wrangler.toml`, wenn per CLI deployt wird, oder manuell im Dashboard unter
 Settings → Functions → D1 database bindings.
 
-## Offene Punkte (Projektbrief Abschnitt 8) – aktueller Stand
+## Bekannte Lücke: keine Benachrichtigung bei neuem Lead
 
-- **Löschfrist Kontaktdaten:** 6 Monate nach Erstkontakt (siehe `datenschutz.html`).
-  Aktuell nur als Text hinterlegt, es läuft noch kein automatischer Lösch-Job.
-- **Domain:** vorerst Standard `*.pages.dev`, eigene Domain kann jederzeit nachträglich
-  ergänzt werden.
-- **Admin-Login:** einfaches Passwort (Cloudflare Secret `ADMIN_PASSWORD`) mit
-  signiertem Session-Cookie, kein Cloudflare Access.
+Es gibt aktuell **keine** E-Mail- oder Push-Benachrichtigung, wenn ein neuer Lead eingeht –
+das war nie Teil der ursprünglichen Umsetzung. Neue Anfragen erscheinen nur im Admin-Dashboard
+unter "Terminanfragen". Falls gewünscht, kann das später ergänzt werden (braucht einen
+E-Mail-Versand-Dienst wie Resend oder SendGrid samt API-Key).
 
 ## Rechtliche Anpassungen (nach Rücksprache)
 
 - **Kein Verweis auf "Swiss Life"** in der Datenschutzerklärung: Swiss Life untersagt laut eigenen
   Nutzungsbedingungen jede Verwendung ihres Namens ohne vorherige schriftliche Zustimmung. Als
   Verantwortlicher wird daher nur Lars Beeler persönlich genannt (Name, private Adresse
-  Tribschenstrasse 48, 6005 Luzern, E-Mail). Falls eine solche Zustimmung von Swiss Life vorliegt
-  oder eingeholt wird, kann der Name in `datenschutz.html` wieder ergänzt werden.
+  Tribschenstrasse 48, 6005 Luzern, E-Mail).
 - **Betroffenenrechte ergänzt:** Auskunft (Art. 25 DSG), Berichtigung/Löschung (Art. 32 DSG),
   Widerspruchsrecht, mit direktem Kontaktweg.
-- **Informationspflicht bei Weiterempfehlung präzisiert** (Art. 19 DSG, Daten nicht direkt von
-  der betroffenen Person erhoben).
-- **Hinweis zu Werbeanrufen:** Beim Erstkontakt mit einer empfohlenen Person gilt das UWG
-  (u. a. Sternchen-Eintrag im Telefonbuch, Art. 3 Abs. 1 lit. u UWG). Vor dem Anruf empfiehlt es
-  sich, die Nummer auf local.ch/search.ch auf einen Sternchen-Vermerk zu prüfen – ein solcher
-  Vermerk untersagt Werbeanrufe ohne bestehende Geschäftsbeziehung.
-- **Hinweis zu Art. 45 VAG:** Diese Umfrage ersetzt nicht die separate gesetzliche
-  Informationspflicht als Versicherungsvermittler (gebunden/ungebunden, Register, Haftung,
-  Entschädigung) beim tatsächlichen Beratungsgespräch mit einer empfohlenen Person.
+- **Einfachere Rechtslage als zuvor:** Da die anfragende Person ihre eigenen Daten direkt selbst
+  einreicht und der Kontaktaufnahme per Pflicht-Checkbox aktiv zustimmt, handelt es sich um eine
+  direkte Datenbeschaffung (Art. 19 Abs. 1 DSG) – die frühere Konstellation mit indirekt
+  erhobenen Daten einer Drittperson (Art. 19 Abs. 2, UWG-Kaltakquise-Fragen) entfällt für den
+  Regelfall.
+- **D1 EU-Jurisdiktion:** Die produktive Datenbank sollte mit `--jurisdiction eu` angelegt werden,
+  damit Speicherung und Verarbeitung der Personendaten innerhalb der EU erfolgen (siehe
+  Deployment-Schritt 3 oben). Das lässt sich nur bei der Neuanlage setzen, nicht nachträglich.
 - Diese Anpassungen wurden mit aktueller Rechtslage (Stand August 2026) plausibilisiert, ersetzen
   aber keine rechtliche Beratung im Einzelfall.
 
 ## Admin-Bereich
 
-Erreichbar unter `/admin/`. Nach Login (Passwort aus `ADMIN_PASSWORD`) stehen drei
-Tabs zur Verfügung:
+Erreichbar unter `/admin/`. Nach Login (Passwort aus `ADMIN_PASSWORD`) stehen zwei Tabs
+zur Verfügung:
 
-- **Übersicht:** Anzahl Antworten, Durchschnittswerte Frage 1 & 2, Anzahl
-  Weiterempfehlungen, offene (nicht kontaktierte) Weiterempfehlungen, Verlauf pro Tag
-- **Antworten:** alle Umfrage-Antworten mit Datum, Bewertungen und Freitextkommentar,
-  filterbar nach Zeitraum und Ja/Nein bei Frage 4
-- **Weiterempfehlungen:** Name, Handynummer, E-Mail, Status kontaktiert/nicht
-  kontaktiert (umschaltbar per Klick), filterbar nach Zeitraum und Status
+- **Übersicht:** Anzahl Anfragen gesamt sowie pro Status (neu, kontaktiert, termin
+  vereinbart, abgeschlossen), Verlauf pro Tag
+- **Terminanfragen:** alle Leads mit Datum, Name, Telefon, E-Mail, Thema, empfehlender
+  Person und Status (per Dropdown direkt änderbar), filterbar nach Zeitraum und Status
