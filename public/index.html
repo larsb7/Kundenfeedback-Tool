@@ -17,8 +17,8 @@
 
   <div class="card" id="screenHero">
     <h1 class="claim">Gute Beratung ist wie ein guter Espresso: einfach gehalten, aber mit erstklassiger Qualität.</h1>
-    <p>Sie wurden von jemandem empfohlen, für den ich mit meiner Beratung bereits einen Mehrwert
-      schaffen konnte. Ich bin mir sicher, auch Sie können profitieren.</p>
+    <p>Sie wurden von jemandem empfohlen, der von meiner Beratung profitieren konnte. Ich bin mir
+      sicher, ich kann auch für Sie einen Mehrwert schaffen.</p>
     <div class="actions" style="margin-top: 8px">
       <button type="button" class="primary" id="startBtn">Jetzt kostenlosen Termin vereinbaren</button>
     </div>
@@ -32,32 +32,26 @@
     <div class="field">
       <label for="vorname">Vorname</label>
       <input type="text" id="vorname" maxlength="200" />
-      <div class="error-text" id="vornameError"></div>
     </div>
     <div class="field">
       <label for="nachname">Nachname</label>
       <input type="text" id="nachname" maxlength="200" />
-      <div class="error-text" id="nachnameError"></div>
     </div>
     <div class="field">
       <label for="telefonnummer">Telefonnummer</label>
       <input type="tel" id="telefonnummer" maxlength="50" placeholder="079 123 45 67" />
-      <div class="error-text" id="telefonnummerError"></div>
     </div>
     <div class="field">
       <label for="email">E-Mail</label>
       <input type="email" id="email" maxlength="300" />
-      <div class="error-text" id="emailError"></div>
     </div>
     <div class="field">
       <label for="thema">Zu folgenden Themen möchte ich beraten werden</label>
       <textarea id="thema" maxlength="2000" placeholder="z. B. Vorsorge, Versicherungen, Anlagen..."></textarea>
-      <div class="error-text" id="themaError"></div>
     </div>
     <div class="field">
       <label for="empfohlenDurch">Durch folgende Person bin ich auf Herrn Beeler aufmerksam geworden</label>
       <input type="text" id="empfohlenDurch" maxlength="300" />
-      <div class="error-text" id="empfohlenDurchError"></div>
     </div>
 
     <div class="checkbox-field">
@@ -69,11 +63,6 @@
       <span></span>
       <button type="button" class="primary" id="submitBtn" disabled>Absenden</button>
     </div>
-
-    <p class="hint-text" style="margin-top: 16px">
-      Weitere Informationen zum Umgang mit Ihren Daten finden Sie in der
-      <a href="/datenschutz.html">Datenschutzerklärung</a>.
-    </p>
   </div>
 
   <div class="card thank-you" id="screenDone" style="display: none">

@@ -34,39 +34,14 @@
   const consentInput = document.getElementById("consent");
 
   function validateForm() {
-    let ok = true;
-    document.getElementById("vornameError").textContent = "";
-    document.getElementById("nachnameError").textContent = "";
-    document.getElementById("telefonnummerError").textContent = "";
-    document.getElementById("emailError").textContent = "";
-    document.getElementById("themaError").textContent = "";
-    document.getElementById("empfohlenDurchError").textContent = "";
-
-    if (vornameInput.value.trim().length === 0) {
-      document.getElementById("vornameError").textContent = "Pflichtfeld";
-      ok = false;
-    }
-    if (nachnameInput.value.trim().length === 0) {
-      document.getElementById("nachnameError").textContent = "Pflichtfeld";
-      ok = false;
-    }
-    if (telefonnummerInput.value.trim().length === 0) {
-      document.getElementById("telefonnummerError").textContent = "Pflichtfeld";
-      ok = false;
-    }
-    if (emailInput.value.trim().length === 0) {
-      document.getElementById("emailError").textContent = "Pflichtfeld";
-      ok = false;
-    }
-    if (themaInput.value.trim().length === 0) {
-      document.getElementById("themaError").textContent = "Pflichtfeld";
-      ok = false;
-    }
-    if (empfohlenDurchInput.value.trim().length === 0) {
-      document.getElementById("empfohlenDurchError").textContent = "Pflichtfeld";
-      ok = false;
-    }
-    return ok;
+    return (
+      vornameInput.value.trim().length > 0 &&
+      nachnameInput.value.trim().length > 0 &&
+      telefonnummerInput.value.trim().length > 0 &&
+      emailInput.value.trim().length > 0 &&
+      themaInput.value.trim().length > 0 &&
+      empfohlenDurchInput.value.trim().length > 0
+    );
   }
 
   const submitBtn = document.getElementById("submitBtn");
@@ -76,7 +51,10 @@
 
   submitBtn.addEventListener("click", async () => {
     hideFormError();
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      showFormError("Bitte füllen Sie alle Felder aus.");
+      return;
+    }
 
     const payload = {
       vorname: vornameInput.value.trim(),
