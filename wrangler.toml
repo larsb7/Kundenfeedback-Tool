@@ -5,4 +5,4 @@ pages_build_output_dir = "public"
 [[d1_databases]]
 binding = "DB"
 database_name = "kundenfeedback-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "8a00c213-dd31-4cea-8622-2a75a601fd51"
