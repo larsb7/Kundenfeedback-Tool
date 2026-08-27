@@ -76,6 +76,15 @@ body {
   box-shadow: 0 2px 4px var(--card-shadow), 0 12px 28px var(--card-shadow);
 }
 
+.hero-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-top: 20px;
+  object-fit: cover;
+}
+
 h1,
 h2 {
   font-family: var(--font-display);
