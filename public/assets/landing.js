@@ -38,33 +38,43 @@
     document.getElementById("vornameError").textContent = "";
     document.getElementById("nachnameError").textContent = "";
     document.getElementById("telefonnummerError").textContent = "";
+    document.getElementById("emailError").textContent = "";
     document.getElementById("themaError").textContent = "";
-    document.getElementById("consentError").textContent = "";
+    document.getElementById("empfohlenDurchError").textContent = "";
 
     if (vornameInput.value.trim().length === 0) {
-      document.getElementById("vornameError").textContent = "Vorname ist ein Pflichtfeld.";
+      document.getElementById("vornameError").textContent = "Pflichtfeld";
       ok = false;
     }
     if (nachnameInput.value.trim().length === 0) {
-      document.getElementById("nachnameError").textContent = "Nachname ist ein Pflichtfeld.";
+      document.getElementById("nachnameError").textContent = "Pflichtfeld";
       ok = false;
     }
     if (telefonnummerInput.value.trim().length === 0) {
-      document.getElementById("telefonnummerError").textContent = "Telefonnummer ist ein Pflichtfeld.";
+      document.getElementById("telefonnummerError").textContent = "Pflichtfeld";
+      ok = false;
+    }
+    if (emailInput.value.trim().length === 0) {
+      document.getElementById("emailError").textContent = "Pflichtfeld";
       ok = false;
     }
     if (themaInput.value.trim().length === 0) {
-      document.getElementById("themaError").textContent = "Bitte geben Sie an, zu welchem Thema Sie beraten werden möchten.";
+      document.getElementById("themaError").textContent = "Pflichtfeld";
       ok = false;
     }
-    if (!consentInput.checked) {
-      document.getElementById("consentError").textContent = "Bitte bestätigen Sie die Einwilligung.";
+    if (empfohlenDurchInput.value.trim().length === 0) {
+      document.getElementById("empfohlenDurchError").textContent = "Pflichtfeld";
       ok = false;
     }
     return ok;
   }
 
-  document.getElementById("submitBtn").addEventListener("click", async () => {
+  const submitBtn = document.getElementById("submitBtn");
+  consentInput.addEventListener("change", () => {
+    submitBtn.disabled = !consentInput.checked;
+  });
+
+  submitBtn.addEventListener("click", async () => {
     hideFormError();
     if (!validateForm()) return;
 
@@ -72,13 +82,12 @@
       vorname: vornameInput.value.trim(),
       nachname: nachnameInput.value.trim(),
       telefonnummer: telefonnummerInput.value.trim(),
-      email: emailInput.value.trim() || null,
+      email: emailInput.value.trim(),
       thema: themaInput.value.trim(),
-      empfohlen_durch: empfohlenDurchInput.value.trim() || null,
+      empfohlen_durch: empfohlenDurchInput.value.trim(),
       consent_kontakt: consentInput.checked,
     };
 
-    const submitBtn = document.getElementById("submitBtn");
     submitBtn.disabled = true;
 
     try {
@@ -95,7 +104,7 @@
     } catch (err) {
       showFormError(err.message || "Beim Absenden ist ein Fehler aufgetreten.");
     } finally {
-      submitBtn.disabled = false;
+      submitBtn.disabled = !consentInput.checked;
     }
   });
 })();

@@ -33,14 +33,14 @@ export async function onRequestPost(context) {
   if (!nonEmptyString(telefonnummer, 50)) {
     return jsonResponse({ error: "Telefonnummer ist ein Pflichtfeld." }, { status: 400 });
   }
-  if (email !== undefined && email !== null && email !== "" && !nonEmptyString(email, 300)) {
-    return jsonResponse({ error: "Ungültige E-Mail-Adresse." }, { status: 400 });
+  if (!nonEmptyString(email, 300)) {
+    return jsonResponse({ error: "E-Mail ist ein Pflichtfeld." }, { status: 400 });
   }
   if (!nonEmptyString(thema, MAX_TEXT_LENGTH)) {
-    return jsonResponse({ error: "Bitte geben Sie an, zu welchem Thema Sie beraten werden möchten." }, { status: 400 });
+    return jsonResponse({ error: "Thema ist ein Pflichtfeld." }, { status: 400 });
   }
-  if (empfohlenDurch !== undefined && empfohlenDurch !== null && empfohlenDurch !== "" && !nonEmptyString(empfohlenDurch, 300)) {
-    return jsonResponse({ error: "Ungültige Angabe zur empfehlenden Person." }, { status: 400 });
+  if (!nonEmptyString(empfohlenDurch, 300)) {
+    return jsonResponse({ error: "Empfehlende Person ist ein Pflichtfeld." }, { status: 400 });
   }
   if (consent !== true) {
     return jsonResponse({ error: "Bitte bestätigen Sie, dass Herr Beeler Sie kontaktieren darf." }, { status: 400 });
@@ -56,9 +56,9 @@ export async function onRequestPost(context) {
       vorname.trim(),
       nachname.trim(),
       telefonnummer.trim(),
-      email ? email.trim() : null,
+      email.trim(),
       thema.trim(),
-      empfohlenDurch ? empfohlenDurch.trim() : null,
+      empfohlenDurch.trim(),
       now
     )
     .run();

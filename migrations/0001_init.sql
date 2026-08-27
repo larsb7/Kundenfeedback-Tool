@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS leads (
   vorname TEXT NOT NULL,
   nachname TEXT NOT NULL,
   telefonnummer TEXT NOT NULL,
-  email TEXT,
+  email TEXT NOT NULL,
   thema TEXT NOT NULL,
-  empfohlen_durch TEXT,
+  empfohlen_durch TEXT NOT NULL,
   consent_kontakt INTEGER NOT NULL CHECK (consent_kontakt = 1),
   status TEXT NOT NULL DEFAULT 'neu' CHECK (status IN ('neu', 'kontaktiert', 'termin_vereinbart', 'abgeschlossen')),
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
