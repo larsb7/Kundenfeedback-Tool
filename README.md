@@ -50,30 +50,33 @@ npm run dev                       # startet wrangler pages dev auf http://localh
 - Landingpage: `http://localhost:8788/`
 - Admin-Bereich: `http://localhost:8788/admin/` (Passwort aus `.dev.vars`)
 
-## Deployment auf Cloudflare (noch nicht ausgeführt)
+## Deployment auf Cloudflare
 
-1. `npx wrangler login`
-2. `npx wrangler pages project create kundenfeedback-tool`
-3. **D1-Datenbank mit EU-Jurisdiktion anlegen** (nur bei Neuanlage möglich, nicht nachträglich
+**Status: live.** Deployt unter **https://kundenfeedback-tool.pages.dev/**
+(Admin-Bereich: `/admin/`). D1-Datenbank läuft in der EU-Jurisdiktion (Region EEUR).
+
+Durchgeführte Schritte (für zukünftige Re-Deployments oder ein neues Environment):
+
+1. `npx wrangler login` (oder `CLOUDFLARE_API_TOKEN` als Umgebungsvariable setzen)
+2. `npx wrangler pages project create kundenfeedback-tool --production-branch main`
+3. **D1-Datenbank mit EU-Jurisdiktion angelegt** (nur bei Neuanlage möglich, nicht nachträglich
    änderbar):
    ```bash
    npx wrangler d1 create kundenfeedback-db --jurisdiction eu
    ```
-   Die zurückgegebene `database_id` in `wrangler.toml` unter `[[d1_databases]]` eintragen
-   (ersetzt `REPLACE_WITH_D1_DATABASE_ID`).
-4. `npm run db:migrate:remote` – Schema auf die produktive D1-Datenbank anwenden
-5. Secrets für die Pages-Umgebung setzen (Production und ggf. Preview):
+   Die zurückgegebene `database_id` steht in `wrangler.toml` unter `[[d1_databases]]`.
+4. `npm run db:migrate:remote` – Schema auf die produktive D1-Datenbank angewendet
+5. Secrets gesetzt:
    ```bash
    npx wrangler pages secret put ADMIN_PASSWORD --project-name kundenfeedback-tool
    npx wrangler pages secret put SESSION_SECRET --project-name kundenfeedback-tool
    ```
-6. `npm run deploy` (bzw. `npx wrangler pages deploy public --project-name kundenfeedback-tool`)
-7. Optional: eigene Domain in Cloudflare Pages unter "Custom domains" verbinden
+6. Deployt mit: `npx wrangler pages deploy public --project-name kundenfeedback-tool --branch main`
+   (`--branch main` sorgt dafür, dass es als Produktions-Deployment auf die Haupt-URL geht,
+   unabhängig vom aktuellen Git-Branch des Codes)
+7. Optional, noch offen: eigene Domain in Cloudflare Pages unter "Custom domains" verbinden
 
-**Wichtig:** Vor dem produktiven Deployment sollte das Pages-Projekt in Cloudflare mit dem
-D1-Binding `DB` (Name wie in `wrangler.toml`) verknüpft werden – entweder automatisch über
-`wrangler.toml`, wenn per CLI deployt wird, oder manuell im Dashboard unter
-Settings → Functions → D1 database bindings.
+**Hinweis:** Benötigt Wrangler v4+ (die `--jurisdiction`-Option gibt es erst ab v4).
 
 ## Bekannte Lücke: keine Benachrichtigung bei neuem Lead
 
@@ -89,7 +92,7 @@ E-Mail-Versand-Dienst wie Resend oder SendGrid samt API-Key).
   Verantwortlicher wird daher nur Lars Beeler persönlich genannt (Name, private Adresse
   Tribschenstrasse 48, 6005 Luzern, E-Mail).
 - **Betroffenenrechte ergänzt:** Auskunft (Art. 25 DSG), Berichtigung/Löschung (Art. 32 DSG),
-  Widerspruchsrecht, mit direktem Kontaktweg.
+  Widerrufsrecht der Einwilligung, Beschwerderecht beim EDÖB, mit direktem Kontaktweg.
 - **Einfachere Rechtslage als zuvor:** Da die anfragende Person ihre eigenen Daten direkt selbst
   einreicht und der Kontaktaufnahme per Pflicht-Checkbox aktiv zustimmt, handelt es sich um eine
   direkte Datenbeschaffung (Art. 19 Abs. 1 DSG) – die frühere Konstellation mit indirekt
